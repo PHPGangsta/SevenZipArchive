@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * This class helps working with the command line version of 7zip (http://www.7-zip.org) to
+ * compress, decompress and verify archives of different formats.
+ *
+ * @author Michael Kliewe
+ * @author Robert Gnuschke, Alpha Team Systems & Consulting GmbH
+ * @copyright Michael Kliewe
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @link http://www.phpgangsta.de
+ * @link http://www.rgshops.de
+ */
+
 class SevenZipArchive
 {
     // formats for compression and decompression
@@ -41,6 +53,25 @@ class SevenZipArchive
     protected $_archivePath;
     protected $_filePath;
     protected $_password;
+    protected $_debug;
+
+    public function checkExecutable()
+    {
+        if (!function_exists('shell_exec')) {
+            return false;
+        }
+        $ret = shell_exec($this->_executablePath);
+        if (strpos($ret, "7-Zip") === false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function getDebug()
+    {
+        return $this->_debug;
+    }
 
     public function setExecutablePath($path)
     {
@@ -86,6 +117,7 @@ class SevenZipArchive
         if (strpos($ret, 'Everything is Ok')!==false) { // compression was successful
             return true;
         } else {
+            $this->_debug = $ret;
             return false;
         }
     }
@@ -104,6 +136,7 @@ class SevenZipArchive
         if (strpos($ret, 'Everything is Ok')!==false) {  // decompression was successful
             return true;
         } else {  // password wrong or bad integrity
+            $this->_debug = $ret;
             return false;
         }
     }
@@ -120,6 +153,7 @@ class SevenZipArchive
         if (strpos($ret, 'Everything is Ok')!==false) {  // verification was successful
             return true;
         } else {  // password wrong or bad integrity
+            $this->_debug = $ret;
             return false;
         }
     }
