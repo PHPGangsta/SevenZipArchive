@@ -122,10 +122,12 @@ class SevenZipArchive
         }
     }
 
-    public function decompress()
+    public function decompress($withFullPath=false)
     {
+        $extractFlag = $withFullPath ? 'x' : 'e';
+
         $command = '"' . $this->_executablePath . '"'
-                 . ' e'
+                 . " {$extractFlag}"
                  . ' -y'
                  . $this->_getPasswordParam()
                  . ' ' . escapeshellarg($this->_archivePath)
