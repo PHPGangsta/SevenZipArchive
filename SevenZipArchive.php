@@ -48,12 +48,7 @@ class SevenZipArchive
     const FORMAT_XAR      = 'xar';
     const FORMAT_Z        = 'z';
 
-    protected $_executablePath;
-    protected $_format;
-    protected $_archivePath;
-    protected $_filePath;
-    protected $_password;
-    protected $_debug;
+    protected $_executablePath, $_format, $_archivePath, $_filePath, $_password, $_debug;
 
     public function checkExecutable()
     {
